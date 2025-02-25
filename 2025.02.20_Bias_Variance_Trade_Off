@@ -1,0 +1,412 @@
+
+# Day 19, 20.02.2021
+
+## __Overview__
+* Topic of the day: Bias, Variance, Bias and Variance Tradeoff, Regularization
+---
+##  __Schedule__
+<span style="color:grey">
+
+|Time|Content|
+|---|---|
+|09:00 - 09:35|Daily Review|
+|10:00 - 11:00|Bias & Variance - Part 1|
+|11:10 - 12:30|Bias & Variance - Part 2|
+|12:30 - 13:30|Lunch Break| 
+|13:30 - 15:00|Bias & Variance - End / Regularization|
+|15:00 - 16:00|Notebooks|
+|15:00 - 16:30|Daily Standup|
+|15:00 - Open End|Exercises|
+---
+</span>
+
+##  __Bias and Variance Tradeoff__
+
+### __Building a model__
+* When getting a dataset, a data scientist will split it into a training dataset and a testing dataset:
+  * the training dataset to build the model
+  * the test dataset to evaluate how well the model performs
+* There are multiple options when building a model from the training dataset, ranging:
+  * from a simple model - e.g. a standard linear model - that might not really capture all points of the training dataset very well
+  * to a fancy model - e.g 50th degree polynomial - that can possibly capture all points of the training dataset perfectly
+* Whatever the model, no matter how well the model performs on the training dataset, there will be test data residuals (i.e. differences between the observed and predicted values of the data) when testing on the test dataset
+
+
+### __Loss and Cost Functions, MSE__
+
+* A loss function quantifies how much a model's prediction differs from the real value
+* A cost function aggregates the loss over the dataset. It can be used to evaluate the performance of a model on a dataset
+* The Mean Square Error (MSE) is a cost function - it is defined as the expected value of the square errors
+* With some magic (and some maths), the MSE can be decomposed as:
+
+$MSE = Bias^2 + Variance + Noise $ 
+
+* In this formula to remember:
+  * Bias: How far away are the decisions from the data?
+  * Variance: How sensitive is the model to the specific training data used?
+  * Noise: irreducible and unpredictable error of the model
+
+![Fish Gif](./model_complexity_transparent_bg.png)
+
+* Typical characteristics of a simple model:
+  * high bias (it is off but it is predictably wrong)
+  * underfitted
+  * low variance (it is less sensitive to changes in the training data)
+  * generalizes better
+* Typical characteristics of a complex model:
+  * low bias (it is off but unpredicably so)
+  * overfitting
+  * high variance
+  * generalizes bad on new data
+
+### __Error analysis__
+* Comparing the error values on different datasets (test/train)
+  * Low on train and high on test is a sign of overfitting
+* Plotting the residuals:
+  * pattern in residual plots are sign of underfitting
+
+### __What's so nice about bias and variance tradeoff?__ 
+
+ This part of data science will continue to be done by humans in a foreseeable future - robots are not able yet to figure out tradeoffs.
+
+##  __Regularization__
+Regularization aims at preventing the overfitting of a model by:
+* reducing the number of features
+* and/or make the model less sensitive to data by reducing the influence of features (using smaller coefficients)
+
+### __Hard constraints__
+The most common hard constraint is a limit on the feature coefficients. For example:
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable displaystyle="true" columnalign="right" columnspacing="0em" rowspacing="3pt">
+    <mtr>
+      <mtd>
+        <mtable displaystyle="true" columnalign="right left" columnspacing="0em" rowspacing="3pt">
+          <mtr>
+            <mtd>
+              <msub>
+                <mi>L</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>1</mn>
+                </mrow>
+              </msub>
+              <mstyle scriptlevel="0">
+                <mspace width="0.167em"></mspace>
+              </mstyle>
+            </mtd>
+            <mtd>
+              <mi></mi>
+              <mo>:</mo>
+              <mstyle scriptlevel="0">
+                <mspace width="0.167em"></mspace>
+              </mstyle>
+              <mrow data-mjx-texclass="ORD">
+                <mo stretchy="false">|</mo>
+              </mrow>
+              <msub>
+                <mi>b</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>1</mn>
+                </mrow>
+              </msub>
+              <mrow data-mjx-texclass="ORD">
+                <mo stretchy="false">|</mo>
+              </mrow>
+              <mo>+</mo>
+              <mrow data-mjx-texclass="ORD">
+                <mo stretchy="false">|</mo>
+              </mrow>
+              <msub>
+                <mi>b</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>2</mn>
+                </mrow>
+              </msub>
+              <mrow data-mjx-texclass="ORD">
+                <mo stretchy="false">|</mo>
+              </mrow>
+              <mo>+</mo>
+              <mo>.</mo>
+              <mo>.</mo>
+              <mo>.</mo>
+              <mo>&#x2264;</mo>
+              <mi>t</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd>
+              <msub>
+                <mi>L</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>2</mn>
+                </mrow>
+              </msub>
+              <mstyle scriptlevel="0">
+                <mspace width="0.167em"></mspace>
+              </mstyle>
+            </mtd>
+            <mtd>
+              <mi></mi>
+              <mo>:</mo>
+              <mstyle scriptlevel="0">
+                <mspace width="0.167em"></mspace>
+              </mstyle>
+              <msubsup>
+                <mi>b</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>1</mn>
+                </mrow>
+                <mn>2</mn>
+              </msubsup>
+              <mo>+</mo>
+              <msubsup>
+                <mi>b</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>2</mn>
+                </mrow>
+                <mn>2</mn>
+              </msubsup>
+              <mo>+</mo>
+              <mo>.</mo>
+              <mo>.</mo>
+              <mo>.</mo>
+              <mo>&#x2264;</mo>
+              <mi>t</mi>
+            </mtd>
+          </mtr>
+        </mtable>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+... where all the coefficients are brought to the same scale to ensure they all contribute to the same
+
+### __Soft constraints__
+The constraint is added to the loss (RMSE) function:
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable displaystyle="true" columnalign="right" columnspacing="0em" rowspacing="3pt">
+    <mtr>
+      <mtd>
+        <mtable displaystyle="true" columnalign="right left" columnspacing="0em" rowspacing="3pt">
+          <mtr>
+            <mtd>
+              <mi>R</mi>
+              <mi>i</mi>
+              <mi>d</mi>
+              <mi>g</mi>
+              <mi>e</mi>
+              <mo stretchy="false">(</mo>
+              <mi>L</mi>
+              <mn>2</mn>
+              <mo stretchy="false">)</mo>
+              <mo>:</mo>
+              <mi>J</mi>
+              <mo stretchy="false">(</mo>
+              <mi>b</mi>
+              <mo stretchy="false">)</mo>
+            </mtd>
+            <mtd>
+              <mi></mi>
+              <mo>=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>n</mi>
+              </mfrac>
+              <mo data-mjx-texclass="OP">&#x2211;</mo>
+              <msup>
+                <mrow data-mjx-texclass="ORD">
+                  <mrow data-mjx-texclass="ORD">
+                    <mo minsize="1.2em" maxsize="1.2em">(</mo>
+                  </mrow>
+                  <mi>y</mi>
+                  <mo>&#x2212;</mo>
+                  <mo stretchy="false">(</mo>
+                  <msub>
+                    <mi>b</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>0</mn>
+                    </mrow>
+                  </msub>
+                  <mo>+</mo>
+                  <msub>
+                    <mi>b</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>1</mn>
+                    </mrow>
+                  </msub>
+                  <msub>
+                    <mi>x</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>1</mn>
+                    </mrow>
+                  </msub>
+                  <mo>+</mo>
+                  <msub>
+                    <mi>b</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>2</mn>
+                    </mrow>
+                  </msub>
+                  <msub>
+                    <mi>x</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>2</mn>
+                    </mrow>
+                  </msub>
+                  <mo stretchy="false">)</mo>
+                  <mrow data-mjx-texclass="ORD">
+                    <mo minsize="1.2em" maxsize="1.2em">)</mo>
+                  </mrow>
+                </mrow>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>2</mn>
+                </mrow>
+              </msup>
+              <mo>+</mo>
+              <mi>&#x3B1;</mi>
+              <mstyle scriptlevel="0">
+                <mspace width="0.167em"></mspace>
+              </mstyle>
+              <mo stretchy="false">(</mo>
+              <msubsup>
+                <mi>b</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>1</mn>
+                </mrow>
+                <mn>2</mn>
+              </msubsup>
+              <mo>+</mo>
+              <msubsup>
+                <mi>b</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>2</mn>
+                </mrow>
+                <mn>2</mn>
+              </msubsup>
+              <mo stretchy="false">)</mo>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd>
+              <mi>L</mi>
+              <mi>a</mi>
+              <mi>s</mi>
+              <mi>s</mi>
+              <mi>o</mi>
+              <mo stretchy="false">(</mo>
+              <mi>L</mi>
+              <mn>1</mn>
+              <mo stretchy="false">)</mo>
+              <mo>:</mo>
+              <mi>J</mi>
+              <mo stretchy="false">(</mo>
+              <mi>b</mi>
+              <mo stretchy="false">)</mo>
+            </mtd>
+            <mtd>
+              <mi></mi>
+              <mo>=</mo>
+              <mfrac>
+                <mn>1</mn>
+                <mi>n</mi>
+              </mfrac>
+              <mo data-mjx-texclass="OP">&#x2211;</mo>
+              <msup>
+                <mrow data-mjx-texclass="ORD">
+                  <mrow data-mjx-texclass="ORD">
+                    <mo minsize="1.2em" maxsize="1.2em">(</mo>
+                  </mrow>
+                  <mi>y</mi>
+                  <mo>&#x2212;</mo>
+                  <mo stretchy="false">(</mo>
+                  <msub>
+                    <mi>b</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>0</mn>
+                    </mrow>
+                  </msub>
+                  <mo>+</mo>
+                  <msub>
+                    <mi>b</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>1</mn>
+                    </mrow>
+                  </msub>
+                  <msub>
+                    <mi>x</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>1</mn>
+                    </mrow>
+                  </msub>
+                  <mo>+</mo>
+                  <msub>
+                    <mi>b</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>2</mn>
+                    </mrow>
+                  </msub>
+                  <msub>
+                    <mi>x</mi>
+                    <mrow data-mjx-texclass="ORD">
+                      <mn>2</mn>
+                    </mrow>
+                  </msub>
+                  <mo stretchy="false">)</mo>
+                  <mrow data-mjx-texclass="ORD">
+                    <mo minsize="1.2em" maxsize="1.2em">)</mo>
+                  </mrow>
+                </mrow>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>2</mn>
+                </mrow>
+              </msup>
+              <mo>+</mo>
+              <mi>&#x3B1;</mi>
+              <mstyle scriptlevel="0">
+                <mspace width="0.167em"></mspace>
+              </mstyle>
+              <mo stretchy="false">(</mo>
+              <mrow data-mjx-texclass="ORD">
+                <mo stretchy="false">|</mo>
+              </mrow>
+              <msub>
+                <mi>b</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>1</mn>
+                </mrow>
+              </msub>
+              <mrow data-mjx-texclass="ORD">
+                <mo stretchy="false">|</mo>
+              </mrow>
+              <mo>+</mo>
+              <mrow data-mjx-texclass="ORD">
+                <mo stretchy="false">|</mo>
+              </mrow>
+              <msub>
+                <mi>b</mi>
+                <mrow data-mjx-texclass="ORD">
+                  <mn>2</mn>
+                </mrow>
+              </msub>
+              <mrow data-mjx-texclass="ORD">
+                <mo stretchy="false">|</mo>
+              </mrow>
+              <mo stretchy="false">)</mo>
+            </mtd>
+          </mtr>
+        </mtable>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+
+* Alpha ($\alpha$) is a hyperparameter
+* An $\alpha$ value of 0 means no constraint on the coefficients, i.e. no regulation
+* A high $\alpha$ value forces the coefficients to be very small or 0 -> the model becomes closer to the average
+
+### __Lasso vs Ridge__
+* Lasso (L1) tends to eliminate weights and perform feature selection
+* Ridge (L2) forces the parameters to be as small as possible
+
+### __Elastic Net__
+* Elastic Net is a mix of Lasso and Ridge
+* Introduces a regularization term (r) which is the weighted average of Ridge and Lasso forms
